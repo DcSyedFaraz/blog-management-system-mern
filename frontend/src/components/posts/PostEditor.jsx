@@ -25,13 +25,13 @@ export default function PostEditor({ initialData, onSubmit, loading }) {
     });
   };
 
-  const textareaStyle = {
+  const fieldStyle = {
     width: '100%',
     padding: '0.65rem 0.75rem',
-    background: '#1a1a2e',
-    border: `1px solid ${errors.content ? '#e94560' : '#444'}`,
-    borderRadius: '4px',
-    color: '#fff',
+    background: 'var(--color-inset)',
+    border: `1px solid ${errors.content ? 'var(--color-danger)' : 'var(--color-border)'}`,
+    borderRadius: 'var(--radius-sm)',
+    color: 'var(--color-text)',
     fontSize: '0.95rem',
     boxSizing: 'border-box',
     outline: 'none',
@@ -49,9 +49,9 @@ export default function PostEditor({ initialData, onSubmit, loading }) {
         {...register('title', { required: 'Title is required', minLength: { value: 3, message: 'Min 3 characters' } })}
       />
       <div style={{ marginBottom: '1rem' }}>
-        <label style={{ display: 'block', marginBottom: '0.35rem', color: '#aaa', fontSize: '0.9rem' }}>Content *</label>
-        <textarea style={textareaStyle} placeholder="Write your post content..." {...register('content', { required: 'Content is required', minLength: { value: 10, message: 'Min 10 characters' } })} />
-        {errors.content && <p style={{ color: '#e94560', margin: '0.25rem 0 1rem', fontSize: '0.82rem' }}>{errors.content.message}</p>}
+        <label style={{ display: 'block', marginBottom: '0.35rem', color: 'var(--color-text-muted)', fontSize: '0.9rem', fontWeight: 500 }}>Content *</label>
+        <textarea style={fieldStyle} placeholder="Write your post content..." {...register('content', { required: 'Content is required', minLength: { value: 10, message: 'Min 10 characters' } })} />
+        {errors.content && <p style={{ color: 'var(--color-danger)', margin: '0.25rem 0 1rem', fontSize: '0.82rem' }}>{errors.content.message}</p>}
       </div>
       <Input
         label="Tags (comma separated)"
@@ -59,9 +59,18 @@ export default function PostEditor({ initialData, onSubmit, loading }) {
         {...register('tags')}
       />
       <div style={{ marginBottom: '1.5rem' }}>
-        <label style={{ display: 'block', marginBottom: '0.35rem', color: '#aaa', fontSize: '0.9rem' }}>Status</label>
+        <label style={{ display: 'block', marginBottom: '0.35rem', color: 'var(--color-text-muted)', fontSize: '0.9rem', fontWeight: 500 }}>Status</label>
         <select
-          style={{ width: '100%', padding: '0.65rem 0.75rem', background: '#1a1a2e', border: '1px solid #444', borderRadius: '4px', color: '#fff', fontSize: '0.95rem', boxSizing: 'border-box' }}
+          style={{
+            width: '100%',
+            padding: '0.65rem 0.75rem',
+            background: 'var(--color-inset)',
+            border: '1px solid var(--color-border)',
+            borderRadius: 'var(--radius-sm)',
+            color: 'var(--color-text)',
+            fontSize: '0.95rem',
+            boxSizing: 'border-box',
+          }}
           {...register('status')}
           defaultValue="draft"
         >

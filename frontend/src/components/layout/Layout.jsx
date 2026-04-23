@@ -3,9 +3,9 @@ import ErrorBoundary from '../common/ErrorBoundary';
 
 export default function Layout({ children }) {
   return (
-    <div style={{ minHeight: '100vh', background: '#16213e', color: '#fff', fontFamily: 'system-ui, sans-serif' }}>
+    <div className="app-layout">
       <Navbar />
-      <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem 1.5rem' }}>
+      <main className="app-main">
         <ErrorBoundary>{children}</ErrorBoundary>
       </main>
     </div>

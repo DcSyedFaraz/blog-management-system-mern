@@ -6,6 +6,16 @@ import PostEditor from '../../components/posts/PostEditor';
 import Spinner from '../../components/common/Spinner';
 import getApiError from '../../utils/apiError';
 
+const alertStyle = {
+  background: 'var(--color-alert-bg)',
+  border: '1px solid var(--color-alert-border)',
+  color: 'var(--color-accent)',
+  padding: '0.75rem 1rem',
+  borderRadius: 'var(--radius-sm)',
+  marginBottom: '1.5rem',
+  fontSize: '0.9rem',
+};
+
 export default function EditPost() {
   const { id } = useParams();
   const { updatePost } = usePosts();
@@ -35,12 +45,12 @@ export default function EditPost() {
   };
 
   if (fetchLoading) return <Spinner />;
-  if (!post) return <div style={{ color: '#888', textAlign: 'center', padding: '4rem' }}>Post not found.</div>;
+  if (!post) return <div style={{ color: 'var(--color-text-muted)', textAlign: 'center', padding: '4rem' }}>Post not found.</div>;
 
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto' }}>
-      <h1 style={{ marginBottom: '2rem' }}>Edit Post</h1>
-      {error && <div style={{ background: '#3a0010', border: '1px solid #e94560', color: '#e94560', padding: '0.75rem 1rem', borderRadius: '4px', marginBottom: '1.5rem', fontSize: '0.9rem' }}>{error}</div>}
+      <h1 style={{ marginBottom: '2rem', fontWeight: 800 }}>Edit Post</h1>
+      {error && <div style={alertStyle}>{error}</div>}
       <PostEditor initialData={post} onSubmit={handleSubmit} loading={loading} />
     </div>
   );

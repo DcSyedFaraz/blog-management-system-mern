@@ -19,7 +19,14 @@ axiosInstance.interceptors.response.use(
   (res) => res,
   async (error) => {
     const original = error.config;
-    if (error.response?.status === 401 && !original._retry) {
+    if (!original) return Promise.reject(error);
+
+    // Wrong credentials return 401 too — never run refresh for those or we replay login,
+    // and failed refresh triggers a full-page redirect that wipes the error message.
+    const url = (original.url || '').toLowerCase();
+    const isPublicAuth = url.includes('/auth/login') || url.includes('/auth/register');
+
+    if (error.response?.status === 401 && !original._retry && !isPublicAuth) {
       original._retry = true;
       try {
         const refreshToken = localStorage.getItem('refreshToken');
@@ -29,10 +36,12 @@ axiosInstance.interceptors.response.use(
         original.headers.Authorization = `Bearer ${data.accessToken}`;
         return axiosInstance(original); // replay with new token
       } catch {
-        // Refresh failed — wipe tokens and send user to login
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
-        window.location.href = '/login';
+        const path = window.location.pathname;
+        if (path !== '/login' && path !== '/register') {
+          window.location.href = '/login';
+        }
       }
     }
     return Promise.reject(error);

@@ -10,29 +10,39 @@ export default function Navbar() {
     navigate('/');
   };
 
-  const linkStyle = { color: '#ccc', textDecoration: 'none', fontSize: '0.9rem' };
-
   return (
-    <nav style={{ padding: '1rem 2rem', background: '#0f0f1a', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #2a2a3e' }}>
-      <Link to="/" style={{ color: '#e94560', fontWeight: 700, fontSize: '1.4rem', textDecoration: 'none' }}>
+    <nav className="app-nav">
+      <Link to="/" className="brand-logo">
         BlogMS
       </Link>
       <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
-        <Link to="/" style={linkStyle}>Blog</Link>
+        <Link to="/" className="nav-link">Blog</Link>
         {isAuthenticated ? (
           <>
-            <Link to="/dashboard" style={linkStyle}>Dashboard</Link>
-            <span style={{ color: '#666', fontSize: '0.9rem' }}>
-              {user?.name} <span style={{ color: '#e94560', fontSize: '0.75rem', textTransform: 'uppercase' }}>[{user?.role}]</span>
+            <Link to="/dashboard" className="nav-link">Dashboard</Link>
+            <span style={{ color: 'var(--color-text-dim)', fontSize: '0.9rem' }}>
+              {user?.name}{' '}
+              <span
+                style={{
+                  color: 'var(--color-secondary-muted)',
+                  fontSize: '0.72rem',
+                  textTransform: 'uppercase',
+                  fontWeight: 700,
+                  letterSpacing: '0.06em',
+                  marginLeft: '0.25rem',
+                }}
+              >
+                [{user?.role}]
+              </span>
             </span>
-            <button onClick={handleLogout} style={{ background: 'none', border: '1px solid #e94560', color: '#e94560', padding: '0.3rem 0.9rem', borderRadius: '4px', cursor: 'pointer', fontSize: '0.85rem' }}>
+            <button type="button" onClick={handleLogout} className="nav-logout">
               Logout
             </button>
           </>
         ) : (
           <>
-            <Link to="/login" style={linkStyle}>Login</Link>
-            <Link to="/register" style={{ ...linkStyle, background: '#e94560', color: '#fff', padding: '0.35rem 1rem', borderRadius: '4px' }}>Register</Link>
+            <Link to="/login" className="nav-link">Login</Link>
+            <Link to="/register" className="nav-link nav-link--cta">Register</Link>
           </>
         )}
       </div>

@@ -9,6 +9,7 @@ export function PostProvider({ children }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // endpoint is passed in so the same fetcher handles public, my-posts, and admin-all.
   const fetchPosts = useCallback(async (filters = {}, endpoint = '/posts') => {
     setLoading(true);
     setError(null);
@@ -26,15 +27,23 @@ export function PostProvider({ children }) {
   }, []);
 
   const createPost = useCallback(async (postData) => {
-    // Optimistic update with temp ID
-    const tempPost = { ...postData, _id: 'temp-' + Date.now(), author: { name: 'You' }, createdAt: new Date().toISOString() };
+    // Optimistic update: insert a placeholder with a temp ID so the UI responds
+    // instantly without waiting for the server round-trip.
+    const tempPost = {
+      ...postData,
+      _id: 'temp-' + Date.now(),
+      author: { name: 'You' },
+      createdAt: new Date().toISOString(),
+    };
     setPosts((prev) => [tempPost, ...prev]);
+
     try {
       const { data } = await axiosInstance.post('/posts', postData);
+      // Replace the placeholder with the real document returned by the server.
       setPosts((prev) => prev.map((p) => (p._id === tempPost._id ? data : p)));
       return data;
     } catch (err) {
-      // Revert optimistic update
+      // Roll back the placeholder so the list stays consistent with server state.
       setPosts((prev) => prev.filter((p) => p._id !== tempPost._id));
       throw err;
     }
